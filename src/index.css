@@ -92,9 +92,18 @@
   body {
     @apply min-h-screen bg-background font-sans text-foreground antialiased;
     background-image:
-      radial-gradient(circle at 20% 10%, rgba(62, 146, 204, 0.2), transparent 42%),
-      radial-gradient(circle at 88% 22%, rgba(59, 183, 126, 0.14), transparent 35%),
-      linear-gradient(180deg, rgba(241, 248, 255, 0.9), rgba(247, 253, 251, 0.95));
+      radial-gradient(circle at -8% -10%, rgba(35, 93, 154, 0.1), transparent 30%),
+      radial-gradient(circle at 108% 4%, rgba(34, 145, 104, 0.07), transparent 28%),
+      radial-gradient(circle at -16% 62%, rgba(42, 116, 178, 0.12), transparent 36%),
+      radial-gradient(circle at 116% 66%, rgba(46, 156, 118, 0.1), transparent 35%),
+      radial-gradient(circle at 50% 128%, rgba(64, 138, 196, 0.1), transparent 42%),
+      linear-gradient(
+        180deg,
+        rgba(228, 240, 251, 0.92) 0%,
+        rgba(233, 245, 251, 0.86) 38%,
+        rgba(236, 248, 245, 0.9) 72%,
+        rgba(230, 243, 250, 0.92) 100%
+      );
   }
 
   #root {
