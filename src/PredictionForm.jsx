@@ -1,4 +1,21 @@
 import { useState } from 'react';
+import { ShieldCheck } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { FIELD_OPTIONS } from './fieldOptions';
 
 const API_URL = 'https://readmitprediction.vercel.app/predict';
@@ -13,14 +30,52 @@ const initialState = {
   age_bin: '',
 };
 
+const FIELD_CONFIG = [
+  {
+    name: 'insurance_type',
+    label: 'Insurance Type',
+    placeholder: 'Select insurance type',
+  },
+  {
+    name: 'prev_readmit_group',
+    label: 'Previous Readmit Group',
+    placeholder: 'Select previous readmit group',
+  },
+  {
+    name: 'los_group',
+    label: 'LOS Group',
+    placeholder: 'Select LOS group',
+  },
+  {
+    name: 'risk_score_bin',
+    label: 'Risk Score Bin',
+    placeholder: 'Select risk score bin',
+  },
+  {
+    name: 'dc_location',
+    label: 'Discharge Location',
+    placeholder: 'Select discharge location',
+  },
+  {
+    name: 'primary_dx_tier',
+    label: 'Primary Diagnosis Tier',
+    placeholder: 'Select primary diagnosis tier',
+  },
+  {
+    name: 'age_bin',
+    label: 'Age Bin',
+    placeholder: 'Select age bin',
+  },
+];
+
 function PredictionForm() {
   const [form, setForm] = useState(initialState);
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
 
-  const handleChange = e => {
-    setForm(f => ({ ...f, [e.target.name]: e.target.value }));
+  const handleValueChange = (name, value) => {
+    setForm(prev => ({ ...prev, [name]: value }));
   };
 
   const handleReset = () => {
@@ -35,7 +90,6 @@ function PredictionForm() {
     setError(null);
     setResult(null);
 
-    // Build input, casting values
     const payload = {
       insurance_type: form.insurance_type,
       prev_readmit_group: parseInt(form.prev_readmit_group, 10),
@@ -54,7 +108,9 @@ function PredictionForm() {
       });
       if (!response.ok) {
         const err = await response.json();
-        throw new Error(err.detail ? JSON.stringify(err.detail) : response.statusText);
+        throw new Error(
+          err.detail ? JSON.stringify(err.detail) : response.statusText
+        );
       }
       const data = await response.json();
       setResult(data);
@@ -65,63 +121,97 @@ function PredictionForm() {
     }
   };
 
-  // Utility to render each dropdown
-  const renderDropdown = (name, label, options) => (
-    <div className="mb-5">
-      <label className="block font-medium mb-1 text-gray-700 dark:text-gray-200" htmlFor={name}>{label}</label>
-      <select
-        id={name}
-        name={name}
-        className="w-full rounded border px-3 py-2 text-gray-900 dark:text-gray-900 dark:bg-gray-100 focus:outline-none focus:ring-2 focus:border-blue-500"
-        value={form[name]}
-        onChange={handleChange}
-        required
-        disabled={loading}
-      >
-        <option value="" disabled>Select...</option>
-        {options.map(opt => (
-          <option key={String(opt)} value={opt}>{opt}</option>
-        ))}
-      </select>
-    </div>
-  );
+  const isSubmitDisabled = loading || Object.values(form).some(value => !value);
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      {renderDropdown('insurance_type', 'Insurance Type', FIELD_OPTIONS.insurance_type)}
-      {renderDropdown('prev_readmit_group', 'Previous Readmit Group', FIELD_OPTIONS.prev_readmit_group)}
-      {renderDropdown('los_group', 'LOS Group', FIELD_OPTIONS.los_group)}
-      {renderDropdown('risk_score_bin', 'Risk Score Bin', FIELD_OPTIONS.risk_score_bin)}
-      {renderDropdown('dc_location', 'Discharge Location', FIELD_OPTIONS.dc_location)}
-      {renderDropdown('primary_dx_tier', 'Primary Diagnosis Tier', FIELD_OPTIONS.primary_dx_tier)}
-      {renderDropdown('age_bin', 'Age Bin', FIELD_OPTIONS.age_bin)}
+    <Card className="mx-auto w-full max-w-4xl border-white/60 bg-white/85 shadow-2xl backdrop-blur-sm">
+      <CardHeader className="border-b border-border/60 pb-5">
+        <CardTitle className="text-2xl">Patient Prediction Inputs</CardTitle>
+        <CardDescription>
+          Complete all fields before submitting for prediction.
+        </CardDescription>
+      </CardHeader>
 
-      <div className="flex gap-4 mt-6">
-        <button
-          type="submit"
-          className="w-1/2 py-2 rounded bg-blue-600 text-white font-semibold disabled:opacity-60 transition"
-          disabled={loading || Object.values(form).some(v => !v)}
-        >
-          {loading ? 'Submitting...' : 'Submit'}
-        </button>
-        <button
-          type="button"
-          className="w-1/2 py-2 rounded bg-gray-300 dark:bg-gray-700 text-gray-900 dark:text-gray-100 font-semibold transition"
-          onClick={handleReset}
-          disabled={loading}
-        >
-          Reset
-        </button>
-      </div>
+      <CardContent className="pt-6">
+        <form onSubmit={handleSubmit} className="grid gap-5 sm:grid-cols-2">
+          {FIELD_CONFIG.map(field => (
+            <div
+              key={field.name}
+              className={field.name === 'age_bin' ? 'space-y-2 sm:col-span-2' : 'space-y-2'}
+            >
+              <Label htmlFor={field.name}>{field.label}</Label>
+              <Select
+                value={form[field.name]}
+                onValueChange={value => handleValueChange(field.name, value)}
+                disabled={loading}
+                required
+              >
+                <SelectTrigger
+                  id={field.name}
+                  className="h-11 w-full rounded-xl bg-background/70"
+                >
+                  <SelectValue placeholder={field.placeholder} />
+                </SelectTrigger>
+                <SelectContent>
+                  {FIELD_OPTIONS[field.name].map(option => {
+                    const optionValue = String(option);
+                    return (
+                      <SelectItem key={optionValue} value={optionValue}>
+                        {optionValue}
+                      </SelectItem>
+                    );
+                  })}
+                </SelectContent>
+              </Select>
+            </div>
+          ))}
 
-      {error && <div className="mt-4 p-3 text-red-700 bg-red-100 rounded">{error}</div>}
-      {result && (
-        <div className="mt-6 p-4 bg-green-50 text-green-900 rounded">
-          <div className="mb-2 font-bold">Prediction Result:</div>
-          <pre className="overflow-x-auto text-sm">{JSON.stringify(result, null, 2)}</pre>
-        </div>
-      )}
-    </form>
+          <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl border border-primary/15 bg-primary/5 p-4">
+            <p className="flex items-center gap-2 text-sm text-muted-foreground">
+              <ShieldCheck className="size-4 text-primary" />
+              Data is submitted to the prediction API when you click Submit.
+            </p>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <Button
+                type="submit"
+                size="lg"
+                className="h-11 flex-1 rounded-xl text-sm font-semibold"
+                disabled={isSubmitDisabled}
+              >
+                {loading ? 'Submitting...' : 'Submit'}
+              </Button>
+              <Button
+                type="button"
+                size="lg"
+                variant="outline"
+                className="h-11 flex-1 rounded-xl text-sm font-semibold"
+                onClick={handleReset}
+                disabled={loading}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
+
+          {error && (
+            <div className="sm:col-span-2 rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-sm text-destructive">
+              {error}
+            </div>
+          )}
+
+          {result && (
+            <div className="sm:col-span-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4">
+              <div className="mb-2 text-sm font-semibold text-emerald-900">
+                Prediction Result:
+              </div>
+              <pre className="overflow-x-auto text-sm text-emerald-950">
+                {JSON.stringify(result, null, 2)}
+              </pre>
+            </div>
+          )}
+        </form>
+      </CardContent>
+    </Card>
   );
 }
 
