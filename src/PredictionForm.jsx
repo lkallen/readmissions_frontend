@@ -157,8 +157,6 @@ function PredictionForm() {
     }
   };
 
-  const missingFieldCount = Object.keys(fieldErrors).length;
-
   return (
     <Card className="mx-auto w-full max-w-4xl border-white/60 bg-white/85 shadow-2xl backdrop-blur-sm">
       <CardHeader className="border-b border-border/60 pb-5">
@@ -202,9 +200,13 @@ function PredictionForm() {
                   })}
                 </SelectContent>
               </Select>
-              {fieldErrors[field.name] && (
-                <p className="text-xs text-destructive">{fieldErrors[field.name]}</p>
-              )}
+              <p
+                className={`min-h-4 text-xs leading-4 ${
+                  fieldErrors[field.name] ? 'text-destructive' : 'text-transparent'
+                }`}
+              >
+                {fieldErrors[field.name] || 'This field is required.'}
+              </p>
             </div>
           ))}
 
@@ -213,11 +215,6 @@ function PredictionForm() {
               <CircleAlert className="size-4 text-primary" />
               Complete all fields before submitting for prediction.
             </p>
-            {submitAttempted && missingFieldCount > 0 && (
-              <p className="text-sm text-destructive">
-                {missingFieldCount} field{missingFieldCount > 1 ? 's' : ''} still required.
-              </p>
-            )}
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button
                 type="submit"
