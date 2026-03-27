@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ShieldCheck } from 'lucide-react';
+import { CircleAlert } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -73,22 +73,58 @@ function PredictionForm() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  const validateForm = values => {
+    const nextErrors = {};
+    FIELD_CONFIG.forEach(field => {
+      if (!values[field.name]) {
+        nextErrors[field.name] = `${field.label} is required.`;
+      }
+    });
+
+    return nextErrors;
+  };
 
   const handleValueChange = (name, value) => {
     setForm(prev => ({ ...prev, [name]: value }));
+
+    if (submitAttempted) {
+      setFieldErrors(prev => {
+        if (!prev[name]) {
+          return prev;
+        }
+
+        const nextErrors = { ...prev };
+        delete nextErrors[name];
+        return nextErrors;
+      });
+    }
   };
 
   const handleReset = () => {
     setForm(initialState);
     setResult(null);
     setError(null);
+    setFieldErrors({});
+    setSubmitAttempted(false);
   };
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setLoading(true);
+    setSubmitAttempted(true);
     setError(null);
     setResult(null);
+
+    const validationErrors = validateForm(form);
+    if (Object.keys(validationErrors).length > 0) {
+      setFieldErrors(validationErrors);
+      return;
+    }
+
+    setFieldErrors({});
+    setLoading(true);
 
     const payload = {
       insurance_type: form.insurance_type,
@@ -121,14 +157,14 @@ function PredictionForm() {
     }
   };
 
-  const isSubmitDisabled = loading || Object.values(form).some(value => !value);
+  const missingFieldCount = Object.keys(fieldErrors).length;
 
   return (
     <Card className="mx-auto w-full max-w-4xl border-white/60 bg-white/85 shadow-2xl backdrop-blur-sm">
       <CardHeader className="border-b border-border/60 pb-5">
         <CardTitle className="text-2xl">Patient Prediction Inputs</CardTitle>
         <CardDescription>
-          Complete all fields before submitting for prediction.
+          Provide patient factors to generate a readmission prediction.
         </CardDescription>
       </CardHeader>
 
@@ -144,11 +180,14 @@ function PredictionForm() {
                 value={form[field.name]}
                 onValueChange={value => handleValueChange(field.name, value)}
                 disabled={loading}
-                required
               >
                 <SelectTrigger
                   id={field.name}
-                  className="h-11 w-full rounded-xl bg-background/70"
+                  className={`h-11 w-full rounded-xl bg-background/70 ${
+                    fieldErrors[field.name]
+                      ? 'border-destructive focus-visible:ring-destructive/30'
+                      : ''
+                  }`}
                 >
                   <SelectValue placeholder={field.placeholder} />
                 </SelectTrigger>
@@ -163,20 +202,28 @@ function PredictionForm() {
                   })}
                 </SelectContent>
               </Select>
+              {fieldErrors[field.name] && (
+                <p className="text-xs text-destructive">{fieldErrors[field.name]}</p>
+              )}
             </div>
           ))}
 
           <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl border border-primary/15 bg-primary/5 p-4">
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              <ShieldCheck className="size-4 text-primary" />
-              Data is submitted to the prediction API when you click Submit.
+              <CircleAlert className="size-4 text-primary" />
+              Complete all fields before submitting for prediction.
             </p>
+            {submitAttempted && missingFieldCount > 0 && (
+              <p className="text-sm text-destructive">
+                {missingFieldCount} field{missingFieldCount > 1 ? 's' : ''} still required.
+              </p>
+            )}
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button
                 type="submit"
                 size="lg"
                 className="h-11 flex-1 rounded-xl text-sm font-semibold"
-                disabled={isSubmitDisabled}
+                disabled={loading}
               >
                 {loading ? 'Submitting...' : 'Submit'}
               </Button>
