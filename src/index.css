@@ -7,24 +7,24 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: oklch(0.98 0.007 205);
-  --foreground: oklch(0.23 0.02 245);
-  --card: oklch(0.995 0.002 220);
-  --card-foreground: oklch(0.23 0.02 245);
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.18 0 0);
+  --card: oklch(0.995 0 0);
+  --card-foreground: oklch(0.18 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.23 0.02 245);
-  --primary: oklch(0.5 0.11 224);
-  --primary-foreground: oklch(0.99 0.002 220);
-  --secondary: oklch(0.93 0.02 210);
-  --secondary-foreground: oklch(0.29 0.03 245);
-  --muted: oklch(0.95 0.01 210);
-  --muted-foreground: oklch(0.52 0.03 245);
-  --accent: oklch(0.9 0.05 183);
-  --accent-foreground: oklch(0.27 0.04 245);
-  --destructive: oklch(0.6 0.18 29);
-  --border: oklch(0.88 0.01 240);
-  --input: oklch(0.95 0.01 220);
-  --ring: oklch(0.56 0.12 224);
+  --popover-foreground: oklch(0.18 0 0);
+  --primary: oklch(0.2 0 0);
+  --primary-foreground: oklch(0.99 0 0);
+  --secondary: oklch(0.94 0 0);
+  --secondary-foreground: oklch(0.2 0 0);
+  --muted: oklch(0.95 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+  --accent: oklch(0.9 0 0);
+  --accent-foreground: oklch(0.2 0 0);
+  --destructive: oklch(0.2 0 0);
+  --border: oklch(0.84 0 0);
+  --input: oklch(0.94 0 0);
+  --ring: oklch(0.35 0 0);
   --radius: 1rem;
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
@@ -91,19 +91,6 @@
 
   body {
     @apply min-h-screen bg-background font-sans text-foreground antialiased;
-    background-image:
-      radial-gradient(circle at -8% -10%, rgba(35, 93, 154, 0.1), transparent 30%),
-      radial-gradient(circle at 108% 4%, rgba(34, 145, 104, 0.07), transparent 28%),
-      radial-gradient(circle at -16% 62%, rgba(42, 116, 178, 0.12), transparent 36%),
-      radial-gradient(circle at 116% 66%, rgba(46, 156, 118, 0.1), transparent 35%),
-      radial-gradient(circle at 50% 128%, rgba(64, 138, 196, 0.1), transparent 42%),
-      linear-gradient(
-        180deg,
-        rgba(228, 240, 251, 0.92) 0%,
-        rgba(233, 245, 251, 0.86) 38%,
-        rgba(236, 248, 245, 0.9) 72%,
-        rgba(230, 243, 250, 0.92) 100%
-      );
   }
 
   #root {

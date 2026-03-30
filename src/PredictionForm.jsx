@@ -158,8 +158,8 @@ function PredictionForm() {
   };
 
   return (
-    <Card className="mx-auto w-full max-w-4xl border-white/60 bg-white/85 shadow-2xl backdrop-blur-sm">
-      <CardHeader className="border-b border-border/60 pb-5">
+    <Card className="mx-auto w-full max-w-4xl rounded-3xl border border-black/20 bg-white shadow-none ring-0">
+      <CardHeader className="border-b border-black/20 pb-5">
         <CardTitle className="text-2xl">Patient Prediction Inputs</CardTitle>
         <CardDescription>
           Provide patient factors to generate a readmission prediction.
@@ -181,7 +181,7 @@ function PredictionForm() {
               >
                 <SelectTrigger
                   id={field.name}
-                  className={`h-11 w-full rounded-xl bg-background/70 ${
+                  className={`h-11 w-full rounded-xl bg-white ${
                     fieldErrors[field.name]
                       ? 'border-destructive focus-visible:ring-destructive/30'
                       : ''
@@ -210,9 +210,9 @@ function PredictionForm() {
             </div>
           ))}
 
-          <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl border border-primary/15 bg-primary/5 p-4">
+          <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl border border-black/20 bg-white p-4">
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CircleAlert className="size-4 text-primary" />
+              <CircleAlert className="size-4 text-foreground" />
               Complete all fields before submitting for prediction.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
@@ -238,17 +238,17 @@ function PredictionForm() {
           </div>
 
           {error && (
-            <div className="sm:col-span-2 rounded-xl border border-destructive/20 bg-destructive/10 p-4 text-sm text-destructive">
+            <div className="sm:col-span-2 rounded-xl border border-black/20 bg-white p-4 text-sm text-foreground">
               {error}
             </div>
           )}
 
           {result && (
-            <div className="sm:col-span-2 rounded-xl border border-emerald-500/20 bg-emerald-500/10 p-4">
-              <div className="mb-2 text-sm font-semibold text-emerald-900">
+            <div className="sm:col-span-2 rounded-xl border border-black/20 bg-white p-4">
+              <div className="mb-2 text-sm font-semibold text-foreground">
                 Prediction Result:
               </div>
-              <pre className="overflow-x-auto text-sm text-emerald-950">
+              <pre className="overflow-x-auto text-sm text-foreground">
                 {JSON.stringify(result, null, 2)}
               </pre>
             </div>
