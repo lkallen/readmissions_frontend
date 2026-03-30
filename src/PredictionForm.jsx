@@ -158,9 +158,9 @@ function PredictionForm() {
   };
 
   return (
-    <Card className="mx-auto w-full max-w-4xl rounded-3xl border border-black/20 bg-white shadow-none ring-0">
-      <CardHeader className="border-b border-black/20 pb-5">
-        <CardTitle className="text-2xl">Patient Prediction Inputs</CardTitle>
+    <Card className="mx-auto w-full max-w-4xl rounded-3xl border-2 border-white/90 bg-white/90 shadow-[0_30px_70px_-45px_oklch(0.33_0.07_242)] ring-2 ring-primary/20 backdrop-blur-md">
+      <CardHeader className="border-b border-border/80 pb-5">
+        <CardTitle className="text-2xl text-foreground">Patient Prediction Inputs</CardTitle>
         <CardDescription>
           Provide patient factors to generate a readmission prediction.
         </CardDescription>
@@ -181,10 +181,10 @@ function PredictionForm() {
               >
                 <SelectTrigger
                   id={field.name}
-                  className={`h-11 w-full rounded-xl bg-white ${
+                  className={`h-11 w-full rounded-xl border-border/90 bg-white/95 shadow-[0_1px_0_0_oklch(0.98_0_0)] transition-[border-color,box-shadow] hover:border-primary/40 ${
                     fieldErrors[field.name]
                       ? 'border-destructive focus-visible:ring-destructive/30'
-                      : ''
+                      : 'focus-visible:border-primary/70 focus-visible:ring-primary/25'
                   }`}
                 >
                   <SelectValue placeholder={field.placeholder} />
@@ -210,16 +210,16 @@ function PredictionForm() {
             </div>
           ))}
 
-          <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl border border-black/20 bg-white p-4">
+          <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl border border-accent/70 bg-gradient-to-r from-accent/50 via-white to-secondary/35 p-4">
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
-              <CircleAlert className="size-4 text-foreground" />
+              <CircleAlert className="size-4 text-primary" />
               Complete all fields before submitting for prediction.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button
                 type="submit"
                 size="lg"
-                className="h-11 flex-1 rounded-xl text-sm font-semibold"
+                className="h-11 flex-1 rounded-xl bg-gradient-to-r from-primary to-primary/90 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-14px_oklch(0.4_0.16_245)] hover:from-primary/95 hover:to-primary"
                 disabled={loading}
               >
                 {loading ? 'Submitting...' : 'Submit'}
@@ -228,7 +228,7 @@ function PredictionForm() {
                 type="button"
                 size="lg"
                 variant="outline"
-                className="h-11 flex-1 rounded-xl text-sm font-semibold"
+                className="h-11 flex-1 rounded-xl border-border/90 bg-white/90 text-sm font-semibold hover:bg-muted/70"
                 onClick={handleReset}
                 disabled={loading}
               >
@@ -238,17 +238,17 @@ function PredictionForm() {
           </div>
 
           {error && (
-            <div className="sm:col-span-2 rounded-xl border border-black/20 bg-white p-4 text-sm text-foreground">
+            <div className="sm:col-span-2 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
               {error}
             </div>
           )}
 
           {result && (
-            <div className="sm:col-span-2 rounded-xl border border-black/20 bg-white p-4">
-              <div className="mb-2 text-sm font-semibold text-foreground">
+            <div className="sm:col-span-2 rounded-xl border border-success/45 bg-success/20 p-4">
+              <div className="mb-2 text-sm font-semibold text-success-foreground">
                 Prediction Result:
               </div>
-              <pre className="overflow-x-auto text-sm text-foreground">
+              <pre className="overflow-x-auto text-sm text-foreground/90">
                 {JSON.stringify(result, null, 2)}
               </pre>
             </div>
