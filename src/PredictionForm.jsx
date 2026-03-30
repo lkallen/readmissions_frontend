@@ -1,70 +1,71 @@
-import { useState } from 'react';
-import { CircleAlert } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { useState } from "react";
+import { CircleAlert, Loader2, WandSparkles } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { FIELD_OPTIONS } from './fieldOptions';
+} from "@/components/ui/select";
+import { FIELD_OPTIONS } from "./fieldOptions";
+import { SAMPLE_PATIENTS } from "./samplePatients";
 
-const API_URL = 'https://readmitprediction.vercel.app/predict';
+const API_URL = "https://readmitprediction.vercel.app/predict";
 
 const initialState = {
-  insurance_type: '',
-  prev_readmit_group: '',
-  los_group: '',
-  risk_score_bin: '',
-  dc_location: '',
-  primary_dx_tier: '',
-  age_bin: '',
+  insurance_type: "",
+  prev_readmit_group: "",
+  los_group: "",
+  risk_score_bin: "",
+  dc_location: "",
+  primary_dx_tier: "",
+  age_bin: "",
 };
 
 const FIELD_CONFIG = [
   {
-    name: 'insurance_type',
-    label: 'Insurance Type',
-    placeholder: 'Select insurance type',
+    name: "insurance_type",
+    label: "Insurance Type",
+    placeholder: "Select insurance type",
   },
   {
-    name: 'prev_readmit_group',
-    label: 'Previous Readmit Group',
-    placeholder: 'Select previous readmit group',
+    name: "prev_readmit_group",
+    label: "Previous Readmit Group",
+    placeholder: "Select previous readmit group",
   },
   {
-    name: 'los_group',
-    label: 'LOS Group',
-    placeholder: 'Select LOS group',
+    name: "los_group",
+    label: "LOS Group",
+    placeholder: "Select LOS group",
   },
   {
-    name: 'risk_score_bin',
-    label: 'Risk Score Bin',
-    placeholder: 'Select risk score bin',
+    name: "risk_score_bin",
+    label: "Risk Score Bin",
+    placeholder: "Select risk score bin",
   },
   {
-    name: 'dc_location',
-    label: 'Discharge Location',
-    placeholder: 'Select discharge location',
+    name: "dc_location",
+    label: "Discharge Location",
+    placeholder: "Select discharge location",
   },
   {
-    name: 'primary_dx_tier',
-    label: 'Primary Diagnosis Tier',
-    placeholder: 'Select primary diagnosis tier',
+    name: "primary_dx_tier",
+    label: "Primary Diagnosis Tier",
+    placeholder: "Select primary diagnosis tier",
   },
   {
-    name: 'age_bin',
-    label: 'Age Bin',
-    placeholder: 'Select age bin',
+    name: "age_bin",
+    label: "Age Bin",
+    placeholder: "Select age bin",
   },
 ];
 
@@ -76,9 +77,9 @@ function PredictionForm() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
-  const validateForm = values => {
+  const validateForm = (values) => {
     const nextErrors = {};
-    FIELD_CONFIG.forEach(field => {
+    FIELD_CONFIG.forEach((field) => {
       if (!values[field.name]) {
         nextErrors[field.name] = `${field.label} is required.`;
       }
@@ -88,10 +89,10 @@ function PredictionForm() {
   };
 
   const handleValueChange = (name, value) => {
-    setForm(prev => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value }));
 
     if (submitAttempted) {
-      setFieldErrors(prev => {
+      setFieldErrors((prev) => {
         if (!prev[name]) {
           return prev;
         }
@@ -111,7 +112,27 @@ function PredictionForm() {
     setSubmitAttempted(false);
   };
 
-  const handleSubmit = async e => {
+  const handleFillSample = () => {
+    const sample =
+      SAMPLE_PATIENTS[Math.floor(Math.random() * SAMPLE_PATIENTS.length)];
+
+    setForm({
+      insurance_type: sample.insurance_type,
+      prev_readmit_group: String(sample.prev_readmit_group),
+      los_group: sample.los_group,
+      risk_score_bin: String(sample.risk_score_bin),
+      dc_location: sample.dc_location,
+      primary_dx_tier: sample.primary_dx_tier,
+      age_bin: String(sample.age_bin),
+    });
+
+    setResult(null);
+    setError(null);
+    setFieldErrors({});
+    setSubmitAttempted(false);
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitAttempted(true);
     setError(null);
@@ -138,59 +159,87 @@ function PredictionForm() {
 
     try {
       const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
       if (!response.ok) {
         const err = await response.json();
         throw new Error(
-          err.detail ? JSON.stringify(err.detail) : response.statusText
+          err.detail ? JSON.stringify(err.detail) : response.statusText,
         );
       }
       const data = await response.json();
       setResult(data);
     } catch (err) {
-      setError(err.message || 'Unexpected error');
+      setError(err.message || "Unexpected error");
     } finally {
       setLoading(false);
     }
   };
 
+  const probabilityValue = Number(result?.probability);
+  const hasProbability = Number.isFinite(probabilityValue);
+  const probabilityPercent = hasProbability
+    ? (probabilityValue * 100).toFixed(1)
+    : null;
+
   return (
     <Card className="mx-auto w-full max-w-4xl rounded-3xl border-2 border-white/90 bg-white/90 shadow-[0_30px_70px_-45px_oklch(0.33_0.07_242)] ring-2 ring-primary/20 backdrop-blur-md">
       <CardHeader className="border-b border-border/80 pb-5">
-        <CardTitle className="text-2xl text-foreground">Patient Prediction Inputs</CardTitle>
-        <CardDescription>
-          Provide patient factors to generate a readmission prediction.
-        </CardDescription>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-1">
+            <CardTitle className="text-2xl text-foreground">
+              Patient Prediction Inputs
+            </CardTitle>
+            <CardDescription>
+              Provide patient factors to generate the probability of hospital
+              readmission within 30 days.
+            </CardDescription>
+          </div>
+          <Button
+            type="button"
+            size="lg"
+            variant="secondary"
+            className="h-11 rounded-xl px-4 text-sm font-semibold"
+            onClick={handleFillSample}
+            disabled={loading}
+          >
+            <WandSparkles className="size-4" />
+            Generate Sample Patient
+          </Button>
+        </div>
       </CardHeader>
 
       <CardContent className="pt-6">
         <form onSubmit={handleSubmit} className="grid gap-5 sm:grid-cols-2">
-          {FIELD_CONFIG.map(field => (
+          {FIELD_CONFIG.map((field) => (
             <div
               key={field.name}
-              className={field.name === 'age_bin' ? 'space-y-2 sm:col-span-2' : 'space-y-2'}
+              className={
+                field.name === "age_bin"
+                  ? "space-y-2 sm:col-span-2"
+                  : "space-y-2"
+              }
             >
               <Label htmlFor={field.name}>{field.label}</Label>
               <Select
                 value={form[field.name]}
-                onValueChange={value => handleValueChange(field.name, value)}
+                onValueChange={(value) => handleValueChange(field.name, value)}
                 disabled={loading}
               >
                 <SelectTrigger
                   id={field.name}
                   className={`h-11 w-full rounded-xl border-border/90 bg-white/95 shadow-[0_1px_0_0_oklch(0.98_0_0)] transition-[border-color,box-shadow] hover:border-primary/40 ${
                     fieldErrors[field.name]
-                      ? 'border-destructive focus-visible:ring-destructive/30'
-                      : 'focus-visible:border-primary/70 focus-visible:ring-primary/25'
+                      ? "border-destructive focus-visible:ring-destructive/30"
+                      : "focus-visible:border-primary/70 focus-visible:ring-primary/25"
                   }`}
                 >
                   <SelectValue placeholder={field.placeholder} />
                 </SelectTrigger>
                 <SelectContent>
-                  {FIELD_OPTIONS[field.name].map(option => {
+                  {FIELD_OPTIONS[field.name].map((option) => {
                     const optionValue = String(option);
                     return (
                       <SelectItem key={optionValue} value={optionValue}>
@@ -202,10 +251,12 @@ function PredictionForm() {
               </Select>
               <p
                 className={`min-h-4 text-xs leading-4 ${
-                  fieldErrors[field.name] ? 'text-destructive' : 'text-transparent'
+                  fieldErrors[field.name]
+                    ? "text-destructive"
+                    : "text-transparent"
                 }`}
               >
-                {fieldErrors[field.name] || 'This field is required.'}
+                {fieldErrors[field.name] || "This field is required."}
               </p>
             </div>
           ))}
@@ -213,7 +264,8 @@ function PredictionForm() {
           <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl border border-accent/70 bg-gradient-to-r from-accent/50 via-white to-secondary/35 p-4">
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
               <CircleAlert className="size-4 text-primary" />
-              Complete all fields before submitting for prediction.
+              Complete all fields before calculating 30-day readmission
+              likelihood.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row">
               <Button
@@ -222,7 +274,14 @@ function PredictionForm() {
                 className="h-11 flex-1 rounded-xl bg-gradient-to-r from-primary to-primary/90 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-14px_oklch(0.4_0.16_245)] hover:from-primary/95 hover:to-primary"
                 disabled={loading}
               >
-                {loading ? 'Submitting...' : 'Submit'}
+                {loading ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    Predicting...
+                  </>
+                ) : (
+                  "Submit"
+                )}
               </Button>
               <Button
                 type="button"
@@ -235,6 +294,19 @@ function PredictionForm() {
                 Reset
               </Button>
             </div>
+
+            {loading && (
+              <div className="rounded-lg border border-primary/20 bg-primary/10 p-3 text-sm text-primary">
+                <p className="flex items-center gap-2 font-medium">
+                  <Loader2 className="size-4 animate-spin" />
+                  Calculating 30-day readmission likelihood...
+                </p>
+                <p className="mt-1 text-primary/90">
+                  This can take a few seconds while the model response is
+                  generated.
+                </p>
+              </div>
+            )}
           </div>
 
           {error && (
@@ -245,12 +317,24 @@ function PredictionForm() {
 
           {result && (
             <div className="sm:col-span-2 rounded-xl border border-success/45 bg-success/20 p-4">
-              <div className="mb-2 text-sm font-semibold text-success-foreground">
-                Prediction Result:
+              <div className="text-sm font-semibold text-success-foreground">
+                Prediction Result
               </div>
-              <pre className="overflow-x-auto text-sm text-foreground/90">
-                {JSON.stringify(result, null, 2)}
-              </pre>
+              {hasProbability ? (
+                <>
+                  <p className="mt-2 text-3xl font-semibold text-foreground">
+                    {probabilityPercent}%
+                  </p>
+                  <p className="mt-1 text-sm text-foreground/85">
+                    Estimated probability of hospital readmission within 30
+                    days.
+                  </p>
+                </>
+              ) : (
+                <p className="mt-2 text-sm text-foreground/90">
+                  Prediction received, but a probability value was not returned.
+                </p>
+              )}
             </div>
           )}
         </form>

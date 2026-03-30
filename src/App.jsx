@@ -14,7 +14,7 @@ function App() {
               Clinical Decision Support
             </p>
             <h1 className="mt-4 font-heading text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              Readmission Risk Prediction
+              Hospital Readmission Likelihood
             </h1>
           </div>
         </section>
