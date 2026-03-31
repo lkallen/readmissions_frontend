@@ -25,7 +25,6 @@ const initialState = {
   insurance_type: "",
   prev_readmit_group: "",
   los_group: "",
-  risk_score_bin: "",
   dc_location: "",
   primary_dx_tier: "",
   age_bin: "",
@@ -33,9 +32,19 @@ const initialState = {
 
 const FIELD_CONFIG = [
   {
+    name: "age_bin",
+    label: "Age Bin",
+    placeholder: "Select age bin",
+  },
+  {
     name: "insurance_type",
     label: "Insurance Type",
     placeholder: "Select insurance type",
+  },
+  {
+    name: "primary_dx_tier",
+    label: "Primary Diagnosis Tier",
+    placeholder: "Select primary diagnosis tier",
   },
   {
     name: "prev_readmit_group",
@@ -44,28 +53,13 @@ const FIELD_CONFIG = [
   },
   {
     name: "los_group",
-    label: "LOS Group",
-    placeholder: "Select LOS group",
-  },
-  {
-    name: "risk_score_bin",
-    label: "Risk Score Bin",
-    placeholder: "Select risk score bin",
+    label: "Current Length of Stay",
+    placeholder: "Select current length of stay",
   },
   {
     name: "dc_location",
     label: "Discharge Location",
     placeholder: "Select discharge location",
-  },
-  {
-    name: "primary_dx_tier",
-    label: "Primary Diagnosis Tier",
-    placeholder: "Select primary diagnosis tier",
-  },
-  {
-    name: "age_bin",
-    label: "Age Bin",
-    placeholder: "Select age bin",
   },
 ];
 
@@ -120,7 +114,6 @@ function PredictionForm() {
       insurance_type: sample.insurance_type,
       prev_readmit_group: String(sample.prev_readmit_group),
       los_group: sample.los_group,
-      risk_score_bin: String(sample.risk_score_bin),
       dc_location: sample.dc_location,
       primary_dx_tier: sample.primary_dx_tier,
       age_bin: String(sample.age_bin),
@@ -151,7 +144,6 @@ function PredictionForm() {
       insurance_type: form.insurance_type,
       prev_readmit_group: parseInt(form.prev_readmit_group, 10),
       los_group: form.los_group,
-      risk_score_bin: parseInt(form.risk_score_bin, 10),
       dc_location: form.dc_location,
       primary_dx_tier: form.primary_dx_tier,
       age_bin: parseInt(form.age_bin, 10),
@@ -212,16 +204,12 @@ function PredictionForm() {
       </CardHeader>
 
       <CardContent className="pt-6">
-        <form onSubmit={handleSubmit} className="grid gap-5 sm:grid-cols-2">
+        <form
+          onSubmit={handleSubmit}
+          className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
+        >
           {FIELD_CONFIG.map((field) => (
-            <div
-              key={field.name}
-              className={
-                field.name === "age_bin"
-                  ? "space-y-2 sm:col-span-2"
-                  : "space-y-2"
-              }
-            >
+            <div key={field.name} className="space-y-2">
               <Label htmlFor={field.name}>{field.label}</Label>
               <Select
                 value={form[field.name]}
@@ -261,17 +249,17 @@ function PredictionForm() {
             </div>
           ))}
 
-          <div className="sm:col-span-2 flex flex-col gap-3 rounded-xl border border-accent/70 bg-gradient-to-r from-accent/50 via-white to-secondary/35 p-4">
+          <div className="col-span-full flex flex-col gap-3 rounded-xl border border-accent/70 bg-gradient-to-r from-accent/50 via-white to-secondary/35 p-4">
             <p className="flex items-center gap-2 text-sm text-muted-foreground">
               <CircleAlert className="size-4 text-primary" />
               Complete all fields before calculating 30-day readmission
               likelihood.
             </p>
-            <div className="flex flex-col gap-3 sm:flex-row">
+            <div className="flex flex-col gap-3 sm:flex-row lg:justify-end">
               <Button
                 type="submit"
                 size="lg"
-                className="h-11 flex-1 rounded-xl bg-gradient-to-r from-primary to-primary/90 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-14px_oklch(0.4_0.16_245)] hover:from-primary/95 hover:to-primary"
+                className="h-11 flex-1 rounded-xl bg-gradient-to-r from-primary to-primary/90 text-sm font-semibold text-primary-foreground shadow-[0_10px_30px_-14px_oklch(0.4_0.16_245)] hover:from-primary/95 hover:to-primary lg:max-w-56 lg:flex-none"
                 disabled={loading}
               >
                 {loading ? (
@@ -287,7 +275,7 @@ function PredictionForm() {
                 type="button"
                 size="lg"
                 variant="outline"
-                className="h-11 flex-1 rounded-xl border-border/90 bg-white/90 text-sm font-semibold hover:bg-muted/70"
+                className="h-11 flex-1 rounded-xl border-border/90 bg-white/90 text-sm font-semibold hover:bg-muted/70 lg:max-w-40 lg:flex-none"
                 onClick={handleReset}
                 disabled={loading}
               >
@@ -310,13 +298,13 @@ function PredictionForm() {
           </div>
 
           {error && (
-            <div className="sm:col-span-2 rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
+            <div className="col-span-full rounded-xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-destructive">
               {error}
             </div>
           )}
 
           {result && (
-            <div className="sm:col-span-2 rounded-xl border border-success/45 bg-success/20 p-4">
+            <div className="col-span-full rounded-xl border border-success/45 bg-success/20 p-4">
               <div className="text-sm font-semibold text-success-foreground">
                 Prediction Result
               </div>
