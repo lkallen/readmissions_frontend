@@ -26,8 +26,34 @@ const initialState = {
   prev_readmit_group: "",
   los_group: "",
   dc_location: "",
-  primary_dx_tier: "",
+  primary_dx: "",
   age_bin: "",
+};
+
+const AGE_BIN_TO_CODE = {
+  "51 years or younger": 1,
+  "52 to 67 years": 2,
+  "68 years or older": 3,
+};
+
+const PREV_READMIT_TO_CODE = {
+  "0 prior readmissions": 0,
+  "1 prior readmission": 1,
+  "2 or more prior readmissions": 2,
+};
+
+const DIAGNOSIS_TO_TIER = {
+  Appendicitis: "lower",
+  Pneumonia: "lower",
+  Diabetes: "lower",
+  Fracture: "lower",
+  Hypertension: "lower",
+  Influenza: "lower",
+  COPD: "higher",
+  "Kidney Disease": "higher",
+  "Heart Failure": "higher",
+  Sepsis: "higher",
+  Stroke: "higher",
 };
 
 const FIELD_CONFIG = [
@@ -42,9 +68,9 @@ const FIELD_CONFIG = [
     placeholder: "Select insurance type",
   },
   {
-    name: "primary_dx_tier",
-    label: "Primary Diagnosis Tier",
-    placeholder: "Select primary diagnosis tier",
+    name: "primary_dx",
+    label: "Primary Diagnosis",
+    placeholder: "Select primary diagnosis",
   },
   {
     name: "prev_readmit_group",
@@ -112,11 +138,11 @@ function PredictionForm() {
 
     setForm({
       insurance_type: sample.insurance_type,
-      prev_readmit_group: String(sample.prev_readmit_group),
+      prev_readmit_group: sample.prev_readmit_group,
       los_group: sample.los_group,
       dc_location: sample.dc_location,
-      primary_dx_tier: sample.primary_dx_tier,
-      age_bin: String(sample.age_bin),
+      primary_dx: sample.primary_dx,
+      age_bin: sample.age_bin,
     });
 
     setResult(null);
@@ -142,11 +168,11 @@ function PredictionForm() {
 
     const payload = {
       insurance_type: form.insurance_type,
-      prev_readmit_group: parseInt(form.prev_readmit_group, 10),
+      prev_readmit_group: PREV_READMIT_TO_CODE[form.prev_readmit_group],
       los_group: form.los_group,
       dc_location: form.dc_location,
-      primary_dx_tier: form.primary_dx_tier,
-      age_bin: parseInt(form.age_bin, 10),
+      primary_dx_tier: DIAGNOSIS_TO_TIER[form.primary_dx],
+      age_bin: AGE_BIN_TO_CODE[form.age_bin],
     };
 
     try {
@@ -228,10 +254,17 @@ function PredictionForm() {
                 </SelectTrigger>
                 <SelectContent>
                   {FIELD_OPTIONS[field.name].map((option) => {
-                    const optionValue = String(option);
+                    const isObjectOption =
+                      typeof option === "object" && option !== null;
+                    const optionValue = isObjectOption
+                      ? String(option.value)
+                      : String(option);
+                    const optionLabel = isObjectOption
+                      ? String(option.label)
+                      : String(option);
                     return (
                       <SelectItem key={optionValue} value={optionValue}>
-                        {optionValue}
+                        {optionLabel}
                       </SelectItem>
                     );
                   })}
