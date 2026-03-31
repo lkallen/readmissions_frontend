@@ -2,7 +2,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Medicare',
     prev_readmit_group: '1 prior readmission',
-    los_group: '6 to 8',
+    los_group: '6-8 days',
     dc_location: 'Home Health',
     primary_dx: 'Pneumonia',
     age_bin: '0-51 years',
@@ -10,7 +10,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Medicaid',
     prev_readmit_group: '2 or more prior readmissions',
-    los_group: '9+',
+    los_group: '9+ days',
     dc_location: 'Skilled Nursing',
     primary_dx: 'Diabetes',
     age_bin: '68+ years',
@@ -18,7 +18,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Private',
     prev_readmit_group: '2 or more prior readmissions',
-    los_group: '6 to 8',
+    los_group: '6-8 days',
     dc_location: 'Rehab',
     primary_dx: 'Sepsis',
     age_bin: '0-51 years',
@@ -26,7 +26,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Uninsured',
     prev_readmit_group: '1 prior readmission',
-    los_group: '6 to 8',
+    los_group: '6-8 days',
     dc_location: 'Home',
     primary_dx: 'Influenza',
     age_bin: '0-51 years',
@@ -34,7 +34,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Private',
     prev_readmit_group: '1 prior readmission',
-    los_group: '5 or less',
+    los_group: '0-5 days',
     dc_location: 'Rehab',
     primary_dx: 'Fracture',
     age_bin: '0-51 years',
@@ -42,7 +42,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Medicare',
     prev_readmit_group: '2 or more prior readmissions',
-    los_group: '6 to 8',
+    los_group: '6-8 days',
     dc_location: 'Skilled Nursing',
     primary_dx: 'COPD',
     age_bin: '0-51 years',
@@ -50,7 +50,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Medicaid',
     prev_readmit_group: '1 prior readmission',
-    los_group: '6 to 8',
+    los_group: '6-8 days',
     dc_location: 'Home Health',
     primary_dx: 'Hypertension',
     age_bin: '0-51 years',
@@ -58,7 +58,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Medicare',
     prev_readmit_group: '2 or more prior readmissions',
-    los_group: '9+',
+    los_group: '9+ days',
     dc_location: 'Rehab',
     primary_dx: 'Heart Failure',
     age_bin: '68+ years',
@@ -66,7 +66,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Medicaid',
     prev_readmit_group: '1 prior readmission',
-    los_group: '6 to 8',
+    los_group: '6-8 days',
     dc_location: 'Home',
     primary_dx: 'Appendicitis',
     age_bin: '0-51 years',
@@ -74,7 +74,7 @@ export const SAMPLE_PATIENTS = [
   {
     insurance_type: 'Private',
     prev_readmit_group: '2 or more prior readmissions',
-    los_group: '6 to 8',
+    los_group: '6-8 days',
     dc_location: 'Skilled Nursing',
     primary_dx: 'Kidney Disease',
     age_bin: '52-67 years',

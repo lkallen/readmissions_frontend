@@ -42,6 +42,12 @@ const PREV_READMIT_TO_CODE = {
   "2 or more prior readmissions": 2,
 };
 
+const LOS_GROUP_TO_BACKEND = {
+  "0-5 days": "5 or less",
+  "6-8 days": "6 to 8",
+  "9+ days": "9+",
+};
+
 const INSURANCE_TO_GROUP = {
   Private: "Private",
   Medicare: "Medicare/Medicaid",
@@ -73,8 +79,8 @@ const DIAGNOSIS_TO_TIER = {
 const FIELD_CONFIG = [
   {
     name: "age_bin",
-    label: "Age Bin",
-    placeholder: "Select age bin",
+    label: "Patient Age",
+    placeholder: "Select patient age",
   },
   {
     name: "insurance_type",
@@ -88,12 +94,12 @@ const FIELD_CONFIG = [
   },
   {
     name: "prev_readmit_group",
-    label: "Previous Readmit Group",
-    placeholder: "Select previous readmit group",
+    label: "Prior Readmissions",
+    placeholder: "Select number of prior readmissions",
   },
   {
     name: "los_group",
-    label: "Current Length of Stay",
+    label: "Length of Stay",
     placeholder: "Select current length of stay",
   },
   {
@@ -183,7 +189,7 @@ function PredictionForm() {
     const payload = {
       insurance_type: INSURANCE_TO_GROUP[form.insurance_type],
       prev_readmit_group: PREV_READMIT_TO_CODE[form.prev_readmit_group],
-      los_group: form.los_group,
+      los_group: LOS_GROUP_TO_BACKEND[form.los_group],
       dc_location: DC_LOCATION_TO_GROUP[form.dc_location],
       primary_dx_tier: DIAGNOSIS_TO_TIER[form.primary_dx],
       age_bin: AGE_BIN_TO_CODE[form.age_bin],

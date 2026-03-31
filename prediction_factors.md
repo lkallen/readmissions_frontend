@@ -21,9 +21,9 @@ These form values are sent to the backend exactly as selected.
 
 ### los_group (Current Length of Stay) -> los_group
 
-- `5 or less` -> `5 or less`
-- `6 to 8` -> `6 to 8`
-- `9+` -> `9+`
+- `0-5 days` -> `5 or less`
+- `6-8 days` -> `6 to 8`
+- `9+ days` -> `9+`
 
 ## Mapped Fields
 
