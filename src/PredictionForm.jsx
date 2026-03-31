@@ -31,15 +31,29 @@ const initialState = {
 };
 
 const AGE_BIN_TO_CODE = {
-  "51 years or younger": 1,
-  "52 to 67 years": 2,
-  "68 years or older": 3,
+  "0-51 years": 1,
+  "52-67 years": 2,
+  "68+ years": 3,
 };
 
 const PREV_READMIT_TO_CODE = {
   "0 prior readmissions": 0,
   "1 prior readmission": 1,
   "2 or more prior readmissions": 2,
+};
+
+const INSURANCE_TO_GROUP = {
+  Private: "Private",
+  Medicare: "Medicare/Medicaid",
+  Medicaid: "Medicare/Medicaid",
+  Uninsured: "Uninsured",
+};
+
+const DC_LOCATION_TO_GROUP = {
+  Home: "Home/Rehab",
+  "Home Health": "HH/SNF",
+  "Skilled Nursing": "HH/SNF",
+  Rehab: "Home/Rehab",
 };
 
 const DIAGNOSIS_TO_TIER = {
@@ -167,10 +181,10 @@ function PredictionForm() {
     setLoading(true);
 
     const payload = {
-      insurance_type: form.insurance_type,
+      insurance_type: INSURANCE_TO_GROUP[form.insurance_type],
       prev_readmit_group: PREV_READMIT_TO_CODE[form.prev_readmit_group],
       los_group: form.los_group,
-      dc_location: form.dc_location,
+      dc_location: DC_LOCATION_TO_GROUP[form.dc_location],
       primary_dx_tier: DIAGNOSIS_TO_TIER[form.primary_dx],
       age_bin: AGE_BIN_TO_CODE[form.age_bin],
     };

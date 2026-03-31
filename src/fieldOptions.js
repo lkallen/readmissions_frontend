@@ -1,5 +1,5 @@
 export const FIELD_OPTIONS = {
-  insurance_type: ['Medicare/Medicaid', 'Private', 'Uninsured'],
+  insurance_type: ['Private', 'Medicare', 'Medicaid', 'Uninsured'],
   prev_readmit_group: [
     { value: '0 prior readmissions', label: '0 prior readmissions' },
     { value: '1 prior readmission', label: '1 prior readmission' },
@@ -9,7 +9,7 @@ export const FIELD_OPTIONS = {
     },
   ],
   los_group: ['5 or less', '6 to 8', '9+'],
-  dc_location: ['HH/SNF', 'Home/Rehab'],
+  dc_location: ['Home', 'Home Health', 'Skilled Nursing', 'Rehab'],
   primary_dx: [
     'Appendicitis',
     'Pneumonia',
@@ -24,8 +24,8 @@ export const FIELD_OPTIONS = {
     'Stroke',
   ],
   age_bin: [
-    { value: '51 years or younger', label: '51 years or younger' },
-    { value: '52 to 67 years', label: '52 to 67 years' },
-    { value: '68 years or older', label: '68 years or older' },
+    { value: '0-51 years', label: '0-51 years' },
+    { value: '52-67 years', label: '52-67 years' },
+    { value: '68+ years', label: '68+ years' },
   ],
 };

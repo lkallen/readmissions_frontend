@@ -24,7 +24,6 @@ class PatientData(BaseModel):
     insurance_type: str
     prev_readmit_group: int
     los_group: str
-    risk_score_bin: int
     dc_location: str
     primary_dx_tier: str
     age_bin: int
@@ -43,7 +42,7 @@ def preprocess_input(data: PatientData):
         column_name = f"{key}_{value}"
         if column_name in columns:
             df_encoded.at[0, column_name] = 1
-        # Handle numerical columns (like risk_score_bin)
+        # Handle numerical columns
         elif key in columns:
             df_encoded.at[0, key] = value
             
