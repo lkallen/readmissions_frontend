@@ -14,8 +14,12 @@ function App() {
               Clinical Decision Support
             </p>
             <h1 className="mt-4 font-heading text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              Hospital Readmission Likelihood
+              Hospital Readmission Prediction
             </h1>
+            <p className="mx-auto mt-3 max-w-2xl text-sm text-muted-foreground sm:text-base">
+              Provide patient factors to generate the probability of hospital
+              readmission within 30 days
+            </p>
           </div>
         </section>
 

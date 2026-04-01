@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -228,12 +227,8 @@ function PredictionForm() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="space-y-1">
             <CardTitle className="text-2xl text-foreground">
-              Patient Prediction Inputs
+              Prediction Inputs
             </CardTitle>
-            <CardDescription>
-              Provide patient factors to generate the probability of hospital
-              readmission within 30 days.
-            </CardDescription>
           </div>
           <Button
             type="button"

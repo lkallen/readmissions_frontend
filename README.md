@@ -1,16 +1,55 @@
-# React + Vite
+# Hospital Readmission Prediction
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a clinical decision-support web application that estimates a patient's probability of 30-day hospital readmission from a set of structured patient factors.
 
-Currently, two official plugins are available:
+The model is trained on **high-quality, realistic synthetic clinical data**, which is designed to reflect real-world hospital patterns while avoiding direct use of real patient records.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Project Purpose
 
-## React Compiler
+- Translate a trained readmission model into a fast, clinician-friendly interface.
+- Support earlier risk stratification using common discharge-era variables.
+- Standardize how teams discuss readmission risk by providing one consistent probability output.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Clinical Applications
 
-## Expanding the ESLint configuration
+- Discharge planning: identify patients who may benefit from additional transition support.
+- Care management triage: prioritize follow-up calls, home health, and post-acute resources.
+- Interdisciplinary huddles: add a quantitative risk signal to case review discussions.
+- Quality improvement: explore how modifiable factors and pathways relate to readmission risk.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## What the App Does
+
+- Collects key patient factors in a guided form:
+  - Age
+  - Insurance type
+  - Primary diagnosis
+  - Prior readmissions
+  - Current length of stay
+  - Discharge location
+  - Age bin
+- Maps user-friendly selections to backend model features.
+- Calls a prediction API and returns estimated probability of 30-day readmission
+
+## Data Source
+
+- Dataset reference: [Hospital Patient Readmission Dataset (Kaggle)](https://www.kaggle.com/datasets/mohamedasak/hospital-patient-readmission-dataset/data)
+- The dataset is synthetic, but structured to be realistic and suitable for prototyping, model development, and workflow simulation.
+
+## Modeling Notes
+
+- Feature engineering was applied to improve model signal and prediction performance.
+- Inputs are transformed into model-ready features before inference.
+
+## Tech Stack
+
+- Frontend
+  - React 19 + Vite
+  - JavaScript (ES modules)
+  - Tailwind CSS v4
+  - shadcn/ui + Radix primitives for UI components
+  - Lucide React icons
+- Model Serving API
+  - FastAPI
+  - Pydantic for request validation
+  - pandas for preprocessing
+  - joblib for loading serialized model artifacts
