@@ -26,7 +26,6 @@ The model is trained on **high-quality, realistic synthetic clinical data**, whi
   - Prior readmissions
   - Current length of stay
   - Discharge location
-  - Age bin
 - Maps user-friendly selections to backend model features.
 - Calls a prediction API and returns estimated probability of 30-day readmission
 
