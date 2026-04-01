@@ -54,3 +54,5 @@ The model is trained on **high-quality, realistic synthetic clinical data**, whi
   - Pydantic for request validation
   - pandas for preprocessing
   - joblib for loading serialized model artifacts
+
+**Backend Repo:** https://github.com/lkallen/readmit_prediction_BE
