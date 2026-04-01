@@ -1,5 +1,7 @@
 # Hospital Readmission Prediction
 
+**Live Application:** https://readmissionprediction.vercel.app/
+
 This project is a clinical decision-support web application that estimates a patient's probability of 30-day hospital readmission from a set of structured patient factors.
 
 The model is trained on **high-quality, realistic synthetic clinical data**, which is designed to reflect real-world hospital patterns while avoiding direct use of real patient records.
@@ -27,7 +29,7 @@ The model is trained on **high-quality, realistic synthetic clinical data**, whi
   - Current length of stay
   - Discharge location
 - Maps user-friendly selections to backend model features.
-- Calls a prediction API and returns estimated probability of 30-day readmission
+- Calls a prediction API and returns estimated probability of 30-day readmission.
 
 ## Data Source
 
